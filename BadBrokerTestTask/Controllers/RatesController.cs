@@ -10,24 +10,24 @@ namespace BadBrokerTestTask.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class RatesController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<RatesController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public RatesController(ILogger<RatesController> logger)
         {
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<> Get()
+        [HttpGet("Best")]
+        public string Best()
         {
-
+            return "kekw";
         }
     }
 }
