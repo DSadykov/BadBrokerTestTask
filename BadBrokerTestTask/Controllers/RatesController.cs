@@ -12,10 +12,6 @@ namespace BadBrokerTestTask.Controllers
     [Route("[controller]")]
     public class RatesController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
         private readonly ILogger<RatesController> _logger;
 
@@ -25,9 +21,10 @@ namespace BadBrokerTestTask.Controllers
         }
 
         [HttpGet("Best")]
-        public string Best()
-        {
-            return "kekw";
+        public string Best(DateTime startDate,DateTime endDate, decimal moneyUsd)
+        { 
+
+            return $"{startDate} - {endDate} - {moneyUsd}";
         }
     }
 }
