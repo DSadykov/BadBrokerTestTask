@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using BadBrokerTestTask.Interfaces;
+using BadBrokerTestTask.Services;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +36,7 @@ namespace BadBrokerTestTask
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BadBrokerTestTask", Version = "v1" });
             });
+            services.AddTransient<IExchangeRatesLoader, ExchangeRatesLoader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
