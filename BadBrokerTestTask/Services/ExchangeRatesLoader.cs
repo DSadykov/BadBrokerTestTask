@@ -35,7 +35,11 @@ namespace BadBrokerTestTask.Services
             {
                 result.Add(await GetRatesForADate(dt));
             }
-            result.RemoveAll(x => x.Rates is null);
+            if(result.Any(x => x.Rates is null))
+            {
+                _logger.LogWarning($"Skipped rates for dates {string.Join(':', result.Where(x => x.Rates is null).Select(x => x.DateTime))}");
+                result.RemoveAll(x => x.Rates is null);
+            }
             _logger.LogInformation($"Successfuly got currency rates for dates {from} - {to}");
             _logger.LogDebug(JsonSerializer.Serialize(result));
             return result;
@@ -56,7 +60,7 @@ namespace BadBrokerTestTask.Services
                 else
                 {
                     _logger.LogError($"{result.StatusCode} : {result.Content}");
-                    return new();
+                    return new() { DateTime=date};
                 }
             }
             catch (Exception ex)
