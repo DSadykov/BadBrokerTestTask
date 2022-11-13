@@ -19,17 +19,21 @@ namespace BadBrokerTestTask.Controllers
 
         private readonly ILogger<RatesController> _logger;
         private readonly IExchangeRatesLoader _exchangeRatesLoader;
+        private readonly IRevenueCalculator _revenueCalculator;
 
-        public RatesController(ILogger<RatesController> logger, IExchangeRatesLoader exchangeRatesLoader)
+        public RatesController(ILogger<RatesController> logger, IExchangeRatesLoader exchangeRatesLoader, IRevenueCalculator revenueCalculator)
         {
             _logger = logger;
             _exchangeRatesLoader = exchangeRatesLoader;
+            _revenueCalculator = revenueCalculator;
         }
 
         [HttpGet("Best")]
-        public async Task<string> Best(DateTime startDate, DateTime endDate, decimal moneyUsd)
+        public async Task<IActionResult> Best(DateTime startDate, DateTime endDate, decimal moneyUsd)
         {
-            return JsonSerializer.Serialize(await _exchangeRatesLoader.GetCurrencyRates(startDate, endDate));
+            var currencies = await _exchangeRatesLoader.GetCurrencyRates(startDate, endDate);
+            var result = _revenueCalculator.CalculateHighestRevenue(currencies, moneyUsd);
+            return Ok(result);
         }
     }
 }
