@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 using BadBrokerTestTask.Interfaces;
@@ -33,6 +35,9 @@ namespace BadBrokerTestTask.Services
             {
                 result.Add(await GetRatesForADate(dt));
             }
+            result.RemoveAll(x => x.Rates is null);
+            _logger.LogInformation($"Successfuly got currency rates for dates {from} - {to}");
+            _logger.LogDebug(JsonSerializer.Serialize(result));
             return result;
         }
         private async Task<CurrencyRateModel> GetRatesForADate(DateTime date)
@@ -40,11 +45,19 @@ namespace BadBrokerTestTask.Services
             var client = new RestClient($"https://openexchangerates.org/api/historical/{date:yyyy-MM-dd}.json?app_id={_apiKey}");
             try
             {
-                var result = await client.GetJsonAsync<CurrencyRateModel>("");
-                result.DateTime = date;
-                result.Rates = result.Rates.Where(x => _requierdCurrencies.Contains(x.Key.ToLower()))
-                                           .ToDictionary(x => x.Key.ToLower(), y => y.Value);
-                return result;
+                var result = await client.ExecuteAsync<CurrencyRateModel>(new RestRequest() { Method = Method.Get });
+                if (result.StatusCode == HttpStatusCode.OK)
+                {
+                    result.Data.DateTime = date;
+                    result.Data.Rates = result.Data.Rates.Where(x => _requierdCurrencies.Contains(x.Key.ToLower()))
+                                               .ToDictionary(x => x.Key.ToLower(), y => y.Value);
+                    return result.Data;
+                }
+                else
+                {
+                    _logger.LogError($"{result.StatusCode} : {result.Content}");
+                    return new();
+                }
             }
             catch (Exception ex)
             {

@@ -56,6 +56,7 @@ namespace BadBrokerTestTask.Services
                     counter++;
                 }
             }
+            _logger.LogInformation($"Successfully calculated highest revenue, revenue is {result.Revenue}, buy at {result.Buydate}, sell at {result.SellDate}, tool is {result.Tool}");
             return result;
         }
 
@@ -66,7 +67,16 @@ namespace BadBrokerTestTask.Services
             {
                 daysNumber++;
             }
-            return usd - (buyCurrency.Rates[currency] * usd / sellCurrency.Rates[currency]) - daysNumber;
+
+            if (buyCurrency.Rates.TryGetValue(currency, out var buyRate) && sellCurrency.Rates.TryGetValue(currency, out var sellRate))
+            {
+                
+                var revenue = usd - (buyRate * usd / sellRate) - daysNumber;
+                _logger.LogDebug($"Revenue for {currency} at {buyCurrency.DateTime} is {revenue}");
+                return revenue;
+            }
+            _logger.LogWarning($"{currency} was not found for {buyCurrency.DateTime} date!");
+            return usd - daysNumber;
         }
     }
 }
