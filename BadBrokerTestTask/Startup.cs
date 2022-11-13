@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using BadBrokerTestTask.Interfaces;
+using BadBrokerTestTask.Middleware;
 using BadBrokerTestTask.Services;
 
 using Microsoft.AspNetCore.Builder;
@@ -39,7 +40,7 @@ namespace BadBrokerTestTask
             });
             services.AddTransient<IExchangeRatesLoader, ExchangeRatesLoader>();
             services.AddTransient<IRevenueCalculator, RevenueCalculator>();
-            services.AddTransient<ExceptionHandlerMiddleware>();
+            services.AddTransient<ExceptionHandlingMiddleware>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +53,7 @@ namespace BadBrokerTestTask
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BadBrokerTestTask v1"));
             }
 
-            app.UseMiddleware<ExceptionHandlerMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
