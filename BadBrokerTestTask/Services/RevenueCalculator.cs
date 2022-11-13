@@ -38,7 +38,7 @@ namespace BadBrokerTestTask.Services
                 Revenue = decimal.MinValue
 
             };
-            currencies.Sort((x,y)=>x.DateTime.CompareTo(y.DateTime));
+            currencies.Sort((x, y) => x.DateTime.CompareTo(y.DateTime));
             foreach (var currency in _requierdCurrencies)
             {
                 var counter = 1;
@@ -72,8 +72,8 @@ namespace BadBrokerTestTask.Services
 
             if (buyCurrency.Rates.TryGetValue(currency, out var buyRate) && sellCurrency.Rates.TryGetValue(currency, out var sellRate))
             {
-                
-                var revenue = usd - (buyRate * usd / sellRate) - daysNumber;
+
+                var revenue = (buyRate * usd / sellRate) - usd - daysNumber;
                 _logger.LogDebug($"Revenue for {currency} at {buyCurrency.DateTime} is {revenue}");
                 return revenue;
             }
