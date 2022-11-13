@@ -31,6 +31,10 @@ namespace BadBrokerTestTask.Controllers
         [HttpGet("Best")]
         public async Task<IActionResult> Best(DateTime startDate, DateTime endDate, decimal moneyUsd)
         {
+            if((endDate - startDate).TotalDays > 60)
+            {
+                return BadRequest("The specified historical period cannot exceed 2 months (60 days)");
+            }
             var currencies = await _exchangeRatesLoader.GetCurrencyRates(startDate, endDate);
             var result = _revenueCalculator.CalculateHighestRevenue(currencies, moneyUsd);
             return Ok(result);
