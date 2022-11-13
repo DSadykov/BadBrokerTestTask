@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BadBrokerTestTask.Models
 {
     public class CurrencyRateModel
     {
-        public string Currency { get; set; }
+        public Dictionary<string, decimal> Rates {get; set; }
         public DateTime DateTime { get; set; }
-        public decimal Price { get; set; }
     }
 }

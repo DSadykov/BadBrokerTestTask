@@ -19,10 +19,10 @@ namespace BadBrokerTestTask.Models.Responses
     public class Rate
     {
         public DateTime Date { get; set; }
-        public double Rub { get; set; }
-        public double Eur { get; set; }
-        public double Gbp { get; set; }
-        public double Jpy { get; set; }
+        public decimal Rub { get; set; }
+        public decimal Eur { get; set; }
+        public decimal Gbp { get; set; }
+        public decimal Jpy { get; set; }
     }
 
 }
