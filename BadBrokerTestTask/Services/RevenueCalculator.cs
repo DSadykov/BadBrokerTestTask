@@ -33,7 +33,9 @@ namespace BadBrokerTestTask.Services
                     Rub = x.Rates["rub"],
                     Jpy = x.Rates["jpy"],
                     Date = x.DateTime
-                }).ToList()
+                }).ToList(),
+                Revenue=decimal.MinValue
+
             };
             foreach (var currency in _requierdCurrencies)
             {
