@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Models;
@@ -34,9 +35,10 @@ namespace BadBrokerTestTask.Services
                     Jpy = x.Rates["jpy"],
                     Date = x.DateTime
                 }).ToList(),
-                Revenue=decimal.MinValue
+                Revenue = decimal.MinValue
 
             };
+            currencies.Sort((x,y)=>x.DateTime.CompareTo(y.DateTime));
             foreach (var currency in _requierdCurrencies)
             {
                 var counter = 1;
