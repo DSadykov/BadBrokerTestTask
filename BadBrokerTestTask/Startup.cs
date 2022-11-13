@@ -37,6 +37,7 @@ namespace BadBrokerTestTask
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BadBrokerTestTask", Version = "v1" });
             });
             services.AddTransient<IExchangeRatesLoader, ExchangeRatesLoader>();
+            services.AddTransient<IRevenueCalculator, RevenueCalculator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
