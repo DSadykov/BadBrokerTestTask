@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+
+using BadBrokerTestTask.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,22 +13,28 @@ namespace BadBrokerTestTask.Controllers
     [Route("[controller]")]
     public class RatesController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
         private readonly ILogger<RatesController> _logger;
+        private readonly IExchangeRatesLoader _exchangeRatesLoader;
+        private readonly IRevenueCalculator _revenueCalculator;
 
-        public RatesController(ILogger<RatesController> logger)
+        public RatesController(ILogger<RatesController> logger, IExchangeRatesLoader exchangeRatesLoader, IRevenueCalculator revenueCalculator)
         {
             _logger = logger;
+            _exchangeRatesLoader = exchangeRatesLoader;
+            _revenueCalculator = revenueCalculator;
         }
 
         [HttpGet("Best")]
-        public string Best()
+        public async Task<IActionResult> Best(DateTime startDate, DateTime endDate, decimal moneyUsd)
         {
-            return "kekw";
+            if ((endDate - startDate).TotalDays > 60)
+            {
+                return BadRequest("The specified historical period cannot exceed 2 months (60 days)");
+            }
+            List<Models.CurrencyRateModel> currencies = await _exchangeRatesLoader.GetCurrencyRates(startDate, endDate);
+            Models.Responses.BestRatesResponse result = _revenueCalculator.CalculateHighestRevenue(currencies, moneyUsd);
+            return Ok(result);
         }
     }
 }
