@@ -35,18 +35,18 @@ namespace BadBrokerTestTask.Services
             DateTime minDate = cachedRates.Min(x => x.DateTime);
             if (minDate > from && maxDate < to)
             {
-                var missedRatesMin = await GetMissedAndCache(from, minDate);
-                var missedRatesMax = await GetMissedAndCache(maxDate, to);
-                return cachedRates.Concat(missedRatesMin).Concat(missedRatesMax).ToList();
+                var missedRatesMin = await GetMissedAndCache(from, minDate.AddDays(-1));
+                var missedRatesMax = await GetMissedAndCache(maxDate.AddDays(1), to);
+                return missedRatesMin.Concat(cachedRates).Concat(missedRatesMax).ToList();
             }
             else if (minDate == from && maxDate < to)
             {
-                var missedRates = await GetMissedAndCache(maxDate, to);
-                return missedRates.Concat(cachedRates).ToList();
+                var missedRates = await GetMissedAndCache(maxDate.AddDays(1), to);
+                return cachedRates.Concat(missedRates).ToList();
             }
             else if (minDate > from && maxDate == to)
             {
-                var missedRates = await GetMissedAndCache(from, minDate);
+                var missedRates = await GetMissedAndCache(from, minDate.AddDays(-1));
                 return missedRates.Concat(cachedRates).ToList();
             }
             else
