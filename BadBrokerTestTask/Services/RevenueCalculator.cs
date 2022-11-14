@@ -25,7 +25,7 @@ namespace BadBrokerTestTask.Services
         {
             BestRatesResponse result = new()
             {
-                Rates = currencies.Select(x => new Rate()
+                Rates = currencies.Select(x => x.ToRate()).ToList(),
                 {
                     Eur = x.Rates["eur"],
                     Gbp = x.Rates["gbp"],
