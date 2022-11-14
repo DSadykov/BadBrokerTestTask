@@ -35,6 +35,7 @@ namespace BadBrokerTestTask.Services
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     result.Data.DateTime = date;
+                    //Selects only required currencies, which are specified in the appsettings
                     result.Data.Rates = result.Data.Rates.Where(x => _requierdCurrencies.Contains(x.Key.ToLower()))
                                                .ToDictionary(x => x.Key.ToLower(), y => y.Value);
                     return result.Data;

@@ -28,9 +28,9 @@ namespace BadBrokerTestTask.Repository
             EnsureCreatedTable();
 
         }
-
         private void EnsureCreatedTable()
         {
+            
             using IDbConnection db = new SqlConnection(_connectionBuilder.ConnectionString);
             try
             {

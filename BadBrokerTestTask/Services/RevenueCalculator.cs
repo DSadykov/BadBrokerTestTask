@@ -26,17 +26,11 @@ namespace BadBrokerTestTask.Services
             BestRatesResponse result = new()
             {
                 Rates = currencies.Select(x => x.ToRate()).ToList(),
-                {
-                    Eur = x.Rates["eur"],
-                    Gbp = x.Rates["gbp"],
-                    Rub = x.Rates["rub"],
-                    Jpy = x.Rates["jpy"],
-                    Date = x.DateTime
-                }).ToList(),
                 Revenue = decimal.MinValue
 
             };
             currencies.Sort((x, y) => x.DateTime.CompareTo(y.DateTime));
+            //revenue is calculated for each currency specified in the appsettings
             foreach (var currency in _requierdCurrencies)
             {
                 var counter = 1;

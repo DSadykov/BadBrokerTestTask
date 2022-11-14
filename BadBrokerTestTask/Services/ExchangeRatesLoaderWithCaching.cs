@@ -21,8 +21,10 @@ namespace BadBrokerTestTask.Services
         public async Task<List<CurrencyRateModel>> GetCurrencyRates(DateTime from, DateTime to)
         {
             List<CurrencyRateModel> cachedRates = await _dbRepository.GetRates(from, to);
+            
             if (!cachedRates.Any())
             {
+                //None cached data were found, downloading entire interval
                 List<CurrencyRateModel> apiRates = await GetMissedAndCache(from, to);
                 return apiRates;
             }
@@ -33,6 +35,13 @@ namespace BadBrokerTestTask.Services
         {
             DateTime maxDate = cachedRates.Max(x => x.DateTime);
             DateTime minDate = cachedRates.Min(x => x.DateTime);
+            /*
+             handles 4 situations:
+                1) cached data is in the middle of dates
+                2) cached data is enough from the beginning to a certain date
+                3) cached data is enough from a certain date until the end
+                4) cached data is enough
+             */
             if (minDate > from && maxDate < to)
             {
                 List<CurrencyRateModel> missedRatesMin = await GetMissedAndCache(from, minDate.AddDays(-1));

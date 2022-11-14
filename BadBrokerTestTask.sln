@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.32804.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadBrokerTestTask", "BadBrokerTestTask\BadBrokerTestTask.csproj", "{25653EC4-5272-4F82-9E72-29B8BA10A924}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadBrokerTestTask.Tests", "BadBrokerTestTask.Tests\BadBrokerTestTask.Tests.csproj", "{A96702A0-B1BD-4B6A-8085-298957B24EFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadBrokerTestTask.Tests", "BadBrokerTestTask.Tests\BadBrokerTestTask.Tests.csproj", "{A96702A0-B1BD-4B6A-8085-298957B24EFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
