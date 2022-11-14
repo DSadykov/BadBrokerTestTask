@@ -21,7 +21,7 @@ namespace BadBrokerTestTask.Models
                 Gbp = gbp,
                 Rub = rub,
                 Jpy = jpy,
-                Date = x.DateTime
+                Date = DateTime
             };
         }
     }
