@@ -39,7 +39,8 @@ namespace BadBrokerTestTask
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BadBrokerTestTask", Version = "v1" });
             });
-            services.AddTransient<IExchangeRatesLoader, ExchangeRatesLoader>();
+            services.AddTransient<ExchangeRatesLoader>();
+            services.AddTransient<IExchangeRatesLoader, ExchangeRatesLoaderWithCaching>();
             services.AddTransient<IOpenExchangeRatesClient, OpenExchangeRatesClient>();
             services.AddTransient<IRevenueCalculator, RevenueCalculator>();
             services.AddTransient<ExceptionHandlingMiddleware>();
