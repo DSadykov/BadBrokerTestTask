@@ -28,7 +28,7 @@ namespace BadBrokerTestTask.Services
             _logger = logger;
             _openExchangeRatesClient = openExchangeRatesClient;
         }
-        public async Task<List<CurrencyRateModel>> GetCurrencyRates(DateTime from, DateTime to)
+        public virtual async Task<List<CurrencyRateModel>> GetCurrencyRates(DateTime from, DateTime to)
         {
             var result = new List<CurrencyRateModel>();
             for (var dt = from; dt <= to; dt = dt.AddDays(1))
