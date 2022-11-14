@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 
 using BadBrokerTestTask.Models;
+using BadBrokerTestTask.Models.Responses;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -62,10 +64,28 @@ namespace BadBrokerTestTask.Services.Tests
 
             //Act
 
-            Models.Responses.BestRatesResponse result = revenueCalculator.CalculateHighestRevenue(currencies, 100);
+            BestRatesResponse result = revenueCalculator.CalculateHighestRevenue(currencies, 100);
 
             //Assert
-
+            Assert.Equal(JsonSerializer.Serialize(new List<Rate>()
+            {
+                new()
+                {
+                    Date=new(2022, 11, 13),
+                    Eur=2,
+                    Gbp=3,
+                    Rub=4,
+                    Jpy=5
+                },
+                new()
+                {
+                    Date=new(2022, 11, 14),
+                    Eur=1,
+                    Gbp=3,
+                    Rub=4,
+                    Jpy=5
+                }
+            }), JsonSerializer.Serialize(result.Rates));
             Assert.Equal(98, result.Revenue);
             Assert.Equal(new(2022, 11, 14), result.SellDate);
             Assert.Equal(new(2022, 11, 13), result.Buydate);
