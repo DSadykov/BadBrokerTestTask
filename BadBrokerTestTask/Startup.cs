@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Middleware;
+using BadBrokerTestTask.Repository;
 using BadBrokerTestTask.Services;
 
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,7 @@ namespace BadBrokerTestTask
             services.AddTransient<IOpenExchangeRatesClient, OpenExchangeRatesClient>();
             services.AddTransient<IRevenueCalculator, RevenueCalculator>();
             services.AddTransient<ExceptionHandlingMiddleware>();
+            services.AddSingleton<IDbRepository, DbRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
