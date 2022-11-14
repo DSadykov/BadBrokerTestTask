@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Models;
 using BadBrokerTestTask.Models.Responses;
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +23,7 @@ namespace BadBrokerTestTask.Services
         }
         public BestRatesResponse CalculateHighestRevenue(List<CurrencyRateModel> currencies, decimal usd)
         {
-            var result = new BestRatesResponse()
+            BestRatesResponse result = new()
             {
                 Rates = currencies.Select(x => new Rate()
                 {
@@ -42,9 +40,9 @@ namespace BadBrokerTestTask.Services
             foreach (var currency in _requierdCurrencies)
             {
                 var counter = 1;
-                foreach (var buyCurrency in currencies)
+                foreach (CurrencyRateModel buyCurrency in currencies)
                 {
-                    foreach (var sellCurrency in currencies.Skip(counter))
+                    foreach (CurrencyRateModel sellCurrency in currencies.Skip(counter))
                     {
                         var tmpRevenue = CountRevenue(buyCurrency, sellCurrency, currency, usd);
                         if (tmpRevenue > result.Revenue)
@@ -65,7 +63,7 @@ namespace BadBrokerTestTask.Services
         private decimal CountRevenue(CurrencyRateModel buyCurrency, CurrencyRateModel sellCurrency, string currency, decimal usd)
         {
             var daysNumber = 0;
-            for (var dt = buyCurrency.DateTime; dt <= sellCurrency.DateTime; dt = dt.AddDays(1))
+            for (DateTime dt = buyCurrency.DateTime; dt <= sellCurrency.DateTime; dt = dt.AddDays(1))
             {
                 daysNumber++;
             }

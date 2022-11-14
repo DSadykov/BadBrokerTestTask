@@ -1,16 +1,15 @@
-﻿using Xunit;
-using BadBrokerTestTask.Services;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using System.Collections.Generic;
 using System.IO;
-using Microsoft.Extensions.Logging;
-using Moq;
+using System.Text;
+
 using BadBrokerTestTask.Models;
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
+using Moq;
+
+using Xunit;
 
 namespace BadBrokerTestTask.Services.Tests
 {
@@ -28,17 +27,17 @@ namespace BadBrokerTestTask.Services.Tests
 }
 ";
 
-            var builder = new ConfigurationBuilder();
+            ConfigurationBuilder builder = new();
 
             builder.AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(appSettings)));
 
-            var configuration = builder.Build();
+            IConfigurationRoot configuration = builder.Build();
 
-            var logger = new Mock<ILogger<RevenueCalculator>>();
+            Mock<ILogger<RevenueCalculator>> logger = new();
 
-            var revenueCalculator = new RevenueCalculator(logger.Object, configuration);
+            RevenueCalculator revenueCalculator = new(logger.Object, configuration);
 
-            var currencies = new List<CurrencyRateModel>() { new CurrencyRateModel()
+            List<CurrencyRateModel> currencies = new() { new CurrencyRateModel()
                 {
                     DateTime = new(2022, 11, 13),
                     Rates=new Dictionary<string, decimal>()
@@ -63,7 +62,7 @@ namespace BadBrokerTestTask.Services.Tests
 
             //Act
 
-            var result = revenueCalculator.CalculateHighestRevenue(currencies, 100);
+            Models.Responses.BestRatesResponse result = revenueCalculator.CalculateHighestRevenue(currencies, 100);
 
             //Assert
 
@@ -71,7 +70,7 @@ namespace BadBrokerTestTask.Services.Tests
             Assert.Equal(new(2022, 11, 14), result.SellDate);
             Assert.Equal(new(2022, 11, 13), result.Buydate);
             Assert.Equal("eur", result.Tool);
-            
+
         }
     }
 }

@@ -28,14 +28,14 @@ namespace BadBrokerTestTask.Middleware
                 await HandleExceptionAsync(context, ex.Message, HttpStatusCode.InternalServerError, "Something bad happened");
             }
         }
-        private async Task HandleExceptionAsync(HttpContext context, string exceptionMessage,HttpStatusCode httpStatusCode, string message)
+        private async Task HandleExceptionAsync(HttpContext context, string exceptionMessage, HttpStatusCode httpStatusCode, string message)
         {
 
             _logger.LogError(exceptionMessage);
-            var response = context.Response;
+            HttpResponse response = context.Response;
             response.ContentType = "application/json";
             response.StatusCode = (int)httpStatusCode;
-            var errorDTO = new ErrorDTO()
+            ErrorDTO errorDTO = new()
             {
                 Message = message,
                 StatusCode = (int)httpStatusCode

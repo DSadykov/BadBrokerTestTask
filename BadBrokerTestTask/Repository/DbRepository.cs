@@ -1,17 +1,17 @@
-﻿using BadBrokerTestTask.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
+
+using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Models;
 
 using Dapper;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BadBrokerTestTask.Repository
 {
@@ -85,16 +85,16 @@ namespace BadBrokerTestTask.Repository
 	  where date between @from and @to
       order by date";
 
-            var queryResult = await db.QueryAsync<CurrencyRateDbModel>(sqlQuery, new { from, to });
-            var result = new List<CurrencyRateModel>();
-            foreach (var groupedCurrencyRateDbModel in queryResult.GroupBy(x => x.Date))
+            IEnumerable<CurrencyRateDbModel> queryResult = await db.QueryAsync<CurrencyRateDbModel>(sqlQuery, new { from, to });
+            List<CurrencyRateModel> result = new();
+            foreach (IGrouping<DateTime, CurrencyRateDbModel> groupedCurrencyRateDbModel in queryResult.GroupBy(x => x.Date))
             {
-                var currencyRateModel = new CurrencyRateModel()
+                CurrencyRateModel currencyRateModel = new()
                 {
                     DateTime = groupedCurrencyRateDbModel.Key,
                     Rates = new()
                 };
-                foreach (var currencyRateDbModel in groupedCurrencyRateDbModel)
+                foreach (CurrencyRateDbModel currencyRateDbModel in groupedCurrencyRateDbModel)
                 {
                     currencyRateModel.Rates[currencyRateDbModel.Currency] = currencyRateDbModel.Rate;
                 }
@@ -118,11 +118,11 @@ else
 	           (@currency
 	           ,@date
 	           ,@rate)";
-            foreach (var currencyRateModel in currencyRateModels) 
-            { 
-                foreach(var rate in currencyRateModel.Rates)
+            foreach (CurrencyRateModel currencyRateModel in currencyRateModels)
+            {
+                foreach (KeyValuePair<string, decimal> rate in currencyRateModel.Rates)
                 {
-                    await db.ExecuteAsync(sqlQuery, new CurrencyRateDbModel() { Currency=rate.Key, Date=currencyRateModel.DateTime, Rate=rate.Value});
+                    await db.ExecuteAsync(sqlQuery, new CurrencyRateDbModel() { Currency = rate.Key, Date = currencyRateModel.DateTime, Rate = rate.Value });
                 }
             }
         }

@@ -1,17 +1,14 @@
-﻿using Xunit;
-using BadBrokerTestTask.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+
 using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Models;
+
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using System.IO;
+
+using Moq;
+
+using Xunit;
 
 namespace BadBrokerTestTask.Services.Tests
 {
@@ -22,9 +19,9 @@ namespace BadBrokerTestTask.Services.Tests
         public async void GetCurrencyRatesTest_ShouldBeOk()
         {
             //Arrange
-            var logger1 = new Mock<ILogger<OpenExchangeRatesClient>>();
+            Mock<ILogger<OpenExchangeRatesClient>> logger1 = new();
             DateTime date = new(2022, 11, 13);
-            var openExchangeRatesClient = new Mock<IOpenExchangeRatesClient>();
+            Mock<IOpenExchangeRatesClient> openExchangeRatesClient = new();
             openExchangeRatesClient.Setup(x => x.GetRatesForADate(date)).ReturnsAsync(new CurrencyRateModel()
             {
                 DateTime = date,
@@ -37,13 +34,13 @@ namespace BadBrokerTestTask.Services.Tests
 
 
 
-            var logger = new Mock<ILogger<ExchangeRatesLoader>>().Object;
+            ILogger<ExchangeRatesLoader> logger = new Mock<ILogger<ExchangeRatesLoader>>().Object;
 
-            var exchangeRatesLoader = new ExchangeRatesLoader(logger, openExchangeRatesClient.Object);
+            ExchangeRatesLoader exchangeRatesLoader = new(logger, openExchangeRatesClient.Object);
 
             //Act
 
-            var result = await exchangeRatesLoader.GetCurrencyRates(date, date);
+            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRates(date, date);
 
             //Assert
 

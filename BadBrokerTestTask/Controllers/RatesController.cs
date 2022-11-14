@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 using BadBrokerTestTask.Interfaces;
@@ -31,12 +28,12 @@ namespace BadBrokerTestTask.Controllers
         [HttpGet("Best")]
         public async Task<IActionResult> Best(DateTime startDate, DateTime endDate, decimal moneyUsd)
         {
-            if((endDate - startDate).TotalDays > 60)
+            if ((endDate - startDate).TotalDays > 60)
             {
                 return BadRequest("The specified historical period cannot exceed 2 months (60 days)");
             }
-            var currencies = await _exchangeRatesLoader.GetCurrencyRates(startDate, endDate);
-            var result = _revenueCalculator.CalculateHighestRevenue(currencies, moneyUsd);
+            List<Models.CurrencyRateModel> currencies = await _exchangeRatesLoader.GetCurrencyRates(startDate, endDate);
+            Models.Responses.BestRatesResponse result = _revenueCalculator.CalculateHighestRevenue(currencies, moneyUsd);
             return Ok(result);
         }
     }

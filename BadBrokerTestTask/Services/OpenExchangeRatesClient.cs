@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+
 using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Models;
 
@@ -27,10 +28,10 @@ namespace BadBrokerTestTask.Services
         }
         public async Task<CurrencyRateModel> GetRatesForADate(DateTime date)
         {
-            var client = new RestClient($"https://openexchangerates.org/api/historical/{date:yyyy-MM-dd}.json?app_id={_apiKey}");
+            RestClient client = new($"https://openexchangerates.org/api/historical/{date:yyyy-MM-dd}.json?app_id={_apiKey}");
             try
             {
-                var result = await client.ExecuteAsync<CurrencyRateModel>(new RestRequest() { Method = Method.Get });
+                RestResponse<CurrencyRateModel> result = await client.ExecuteAsync<CurrencyRateModel>(new RestRequest() { Method = Method.Get });
                 if (result.StatusCode == HttpStatusCode.OK)
                 {
                     result.Data.DateTime = date;

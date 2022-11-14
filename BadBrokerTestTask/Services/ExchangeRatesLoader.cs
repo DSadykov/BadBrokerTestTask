@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Models;
 
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
-using RestSharp;
 
 namespace BadBrokerTestTask.Services
 {
@@ -30,8 +24,8 @@ namespace BadBrokerTestTask.Services
         }
         public virtual async Task<List<CurrencyRateModel>> GetCurrencyRates(DateTime from, DateTime to)
         {
-            var result = new List<CurrencyRateModel>();
-            for (var dt = from; dt <= to; dt = dt.AddDays(1))
+            List<CurrencyRateModel> result = new();
+            for (DateTime dt = from; dt <= to; dt = dt.AddDays(1))
             {
                 CurrencyRateModel item = await _openExchangeRatesClient.GetRatesForADate(dt);
                 if (item is not null)
