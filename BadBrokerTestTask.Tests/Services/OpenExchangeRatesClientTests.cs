@@ -44,7 +44,7 @@ namespace BadBrokerTestTask.Services.Tests
 
             // Act
 
-            Models.CurrencyRateModel result = await openExchangeRatesClient.GetRatesForADate(date);
+            Models.CurrencyRateModel result = await openExchangeRatesClient.GetRatesForADateAsync(date);
 
             // Assert
 
@@ -79,7 +79,7 @@ namespace BadBrokerTestTask.Services.Tests
 
             // Act
 
-            Models.CurrencyRateModel result = await openExchangeRatesClient.GetRatesForADate(date);
+            Models.CurrencyRateModel result = await openExchangeRatesClient.GetRatesForADateAsync(date);
 
             // Assert
 

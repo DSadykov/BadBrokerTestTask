@@ -22,12 +22,12 @@ namespace BadBrokerTestTask.Services
             _logger = logger;
             _openExchangeRatesClient = openExchangeRatesClient;
         }
-        public virtual async Task<List<CurrencyRateModel>> GetCurrencyRates(DateTime from, DateTime to)
+        public virtual async Task<List<CurrencyRateModel>> GetCurrencyRatesAsync(DateTime from, DateTime to)
         {
             List<CurrencyRateModel> result = new();
             for (DateTime dt = from; dt <= to; dt = dt.AddDays(1))
             {
-                CurrencyRateModel item = await _openExchangeRatesClient.GetRatesForADate(dt);
+                CurrencyRateModel item = await _openExchangeRatesClient.GetRatesForADateAsync(dt);
                 if (item is not null)
                 {
                     result.Add(item);

@@ -26,7 +26,7 @@ namespace BadBrokerTestTask.Services
             _requierdCurrencies = configuration["RequiredCurrencies"].Split(',').Select(x => x.ToLower()).ToList();
             _logger = logger;
         }
-        public async Task<CurrencyRateModel> GetRatesForADate(DateTime date)
+        public async Task<CurrencyRateModel> GetRatesForADateAsync(DateTime date)
         {
             RestClient client = new($"https://openexchangerates.org/api/historical/{date:yyyy-MM-dd}.json?app_id={_apiKey}");
             try

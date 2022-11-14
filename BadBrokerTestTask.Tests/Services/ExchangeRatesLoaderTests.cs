@@ -22,7 +22,7 @@ namespace BadBrokerTestTask.Services.Tests
             Mock<ILogger<OpenExchangeRatesClient>> logger1 = new();
             DateTime date = new(2022, 11, 13);
             Mock<IOpenExchangeRatesClient> openExchangeRatesClient = new();
-            openExchangeRatesClient.Setup(x => x.GetRatesForADate(date)).ReturnsAsync(new CurrencyRateModel()
+            openExchangeRatesClient.Setup(x => x.GetRatesForADateAsync(date)).ReturnsAsync(new CurrencyRateModel()
             {
                 DateTime = date,
                 Rates = new Dictionary<string, decimal>()
@@ -40,7 +40,7 @@ namespace BadBrokerTestTask.Services.Tests
 
             //Act
 
-            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRates(date, date);
+            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRatesAsync(date, date);
 
             //Assert
 

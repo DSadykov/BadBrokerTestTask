@@ -75,7 +75,7 @@ namespace BadBrokerTestTask.Repository
             _connectionBuilder.InitialCatalog = dbName;
         }
 
-        public async Task<List<CurrencyRateModel>> GetRates(DateTime from, DateTime to)
+        public async Task<List<CurrencyRateModel>> GetRatesAsync(DateTime from, DateTime to)
         {
             using IDbConnection db = new SqlConnection(_connectionBuilder.ConnectionString);
             var sqlQuery = @"select [Currency]
@@ -104,7 +104,7 @@ namespace BadBrokerTestTask.Repository
             return result;
         }
 
-        public async Task AddRates(List<CurrencyRateModel> currencyRateModels)
+        public async Task AddRatesAsync(List<CurrencyRateModel> currencyRateModels)
         {
             using IDbConnection db = new SqlConnection(_connectionBuilder.ConnectionString);
             var sqlQuery = @"if((select count(*) from Rates where Date=@date and @currency=Currency)=1)
