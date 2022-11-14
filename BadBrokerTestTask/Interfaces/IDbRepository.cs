@@ -8,7 +8,7 @@ namespace BadBrokerTestTask.Interfaces
 {
     public interface IDbRepository
     {
-        Task AddRates(List<CurrencyRateModel> currencyRateModels);
-        Task<List<CurrencyRateModel>> GetRates(DateTime from, DateTime to);
+        Task AddRatesAsync(List<CurrencyRateModel> currencyRateModels);
+        Task<List<CurrencyRateModel>> GetRatesAsync(DateTime from, DateTime to);
     }
 }

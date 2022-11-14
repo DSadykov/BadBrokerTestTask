@@ -39,17 +39,17 @@ namespace BadBrokerTestTask.Services.Tests
 
 
             Mock<IDbRepository> dbRepositoryMock = new();
-            dbRepositoryMock.Setup(x => x.GetRates(_from, _to)).ReturnsAsync(cachedRates);
+            dbRepositoryMock.Setup(x => x.GetRatesAsync(_from, _to)).ReturnsAsync(cachedRates);
             IDbRepository _dbRepository = dbRepositoryMock.Object;
 
             Mock<ExchangeRatesLoader> mockExchangeRatesLoader = new(new Mock<ILogger<ExchangeRatesLoader>>().Object, new Mock<IOpenExchangeRatesClient>().Object);
-            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRates(_from, _to)).ReturnsAsync(apiRates);
+            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRatesAsync(_from, _to)).ReturnsAsync(apiRates);
             ExchangeRatesLoader _exchangeRatesLoader = mockExchangeRatesLoader.Object;
 
             ExchangeRatesLoaderWithCaching exchangeRatesLoader = new(_exchangeRatesLoader, _dbRepository);
             //assert
 
-            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRates(_from, _to);
+            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRatesAsync(_from, _to);
 
             //act
             Assert.Equal(JsonConvert.SerializeObject(cachedRates), JsonConvert.SerializeObject(result));
@@ -69,17 +69,17 @@ namespace BadBrokerTestTask.Services.Tests
 
 
             Mock<IDbRepository> dbRepositoryMock = new();
-            dbRepositoryMock.Setup(x => x.GetRates(_from, _to)).ReturnsAsync(cachedRates);
+            dbRepositoryMock.Setup(x => x.GetRatesAsync(_from, _to)).ReturnsAsync(cachedRates);
             IDbRepository _dbRepository = dbRepositoryMock.Object;
 
             Mock<ExchangeRatesLoader> mockExchangeRatesLoader = new(new Mock<ILogger<ExchangeRatesLoader>>().Object, new Mock<IOpenExchangeRatesClient>().Object);
-            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRates(_from, _to)).ReturnsAsync(apiRates);
+            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRatesAsync(_from, _to)).ReturnsAsync(apiRates);
             ExchangeRatesLoader _exchangeRatesLoader = mockExchangeRatesLoader.Object;
 
             ExchangeRatesLoaderWithCaching exchangeRatesLoader = new(_exchangeRatesLoader, _dbRepository);
             //assert
 
-            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRates(_from, _to);
+            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRatesAsync(_from, _to);
 
             //act
             Assert.Equal(JsonConvert.SerializeObject(apiRates), JsonConvert.SerializeObject(result));
@@ -103,17 +103,17 @@ namespace BadBrokerTestTask.Services.Tests
 
 
             Mock<IDbRepository> dbRepositoryMock = new();
-            dbRepositoryMock.Setup(x => x.GetRates(_fromRepository, _toApi)).ReturnsAsync(cachedRates);
+            dbRepositoryMock.Setup(x => x.GetRatesAsync(_fromRepository, _toApi)).ReturnsAsync(cachedRates);
             IDbRepository _dbRepository = dbRepositoryMock.Object;
 
             Mock<ExchangeRatesLoader> mockExchangeRatesLoader = new(new Mock<ILogger<ExchangeRatesLoader>>().Object, new Mock<IOpenExchangeRatesClient>().Object);
-            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRates(_fromApi, _toApi)).ReturnsAsync(apiRates);
+            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRatesAsync(_fromApi, _toApi)).ReturnsAsync(apiRates);
             ExchangeRatesLoader _exchangeRatesLoader = mockExchangeRatesLoader.Object;
 
             ExchangeRatesLoaderWithCaching exchangeRatesLoader = new(_exchangeRatesLoader, _dbRepository);
             //assert
 
-            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRates(_fromRepository, _toApi);
+            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRatesAsync(_fromRepository, _toApi);
 
             //act
             Assert.Equal(JsonConvert.SerializeObject(cachedRates.Concat(apiRates).ToList()), JsonConvert.SerializeObject(result));
@@ -137,17 +137,17 @@ namespace BadBrokerTestTask.Services.Tests
 
 
             Mock<IDbRepository> dbRepositoryMock = new();
-            dbRepositoryMock.Setup(x => x.GetRates(_fromApi, _toRepository)).ReturnsAsync(cachedRates);
+            dbRepositoryMock.Setup(x => x.GetRatesAsync(_fromApi, _toRepository)).ReturnsAsync(cachedRates);
             IDbRepository _dbRepository = dbRepositoryMock.Object;
 
             Mock<ExchangeRatesLoader> mockExchangeRatesLoader = new(new Mock<ILogger<ExchangeRatesLoader>>().Object, new Mock<IOpenExchangeRatesClient>().Object);
-            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRates(_fromApi, _toApi)).ReturnsAsync(apiRates);
+            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRatesAsync(_fromApi, _toApi)).ReturnsAsync(apiRates);
             ExchangeRatesLoader _exchangeRatesLoader = mockExchangeRatesLoader.Object;
 
             ExchangeRatesLoaderWithCaching exchangeRatesLoader = new(_exchangeRatesLoader, _dbRepository);
             //assert
 
-            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRates(_fromApi, _toRepository);
+            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRatesAsync(_fromApi, _toRepository);
 
             //act
             Assert.Equal(JsonConvert.SerializeObject(apiRates.Concat(cachedRates).ToList()), JsonConvert.SerializeObject(result));
@@ -177,11 +177,11 @@ namespace BadBrokerTestTask.Services.Tests
             };
 
             Mock<IDbRepository> dbRepositoryMock = new();
-            dbRepositoryMock.Setup(x => x.GetRates(_fromApiFirst, _toApiSecond)).ReturnsAsync(cachedRates);
+            dbRepositoryMock.Setup(x => x.GetRatesAsync(_fromApiFirst, _toApiSecond)).ReturnsAsync(cachedRates);
             IDbRepository _dbRepository = dbRepositoryMock.Object;
 
             Mock<ExchangeRatesLoader> mockExchangeRatesLoader = new(new Mock<ILogger<ExchangeRatesLoader>>().Object, new Mock<IOpenExchangeRatesClient>().Object);
-            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRates(It.IsAny<DateTime>(), It.IsAny<DateTime>())).ReturnsAsync((DateTime x, DateTime y) =>
+            mockExchangeRatesLoader.Setup(x => x.GetCurrencyRatesAsync(It.IsAny<DateTime>(), It.IsAny<DateTime>())).ReturnsAsync((DateTime x, DateTime y) =>
             {
                 return x == _fromApiFirst && y == _toApiFirst ? apiRatesFirst : apiRatesSecond;
             });
@@ -190,7 +190,7 @@ namespace BadBrokerTestTask.Services.Tests
             ExchangeRatesLoaderWithCaching exchangeRatesLoader = new(_exchangeRatesLoader, _dbRepository);
             //assert
 
-            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRates(_fromApiFirst, _toApiSecond);
+            List<CurrencyRateModel> result = await exchangeRatesLoader.GetCurrencyRatesAsync(_fromApiFirst, _toApiSecond);
 
             //act
             Assert.Equal(JsonConvert.SerializeObject(apiRatesFirst.Concat(cachedRates).Concat(apiRatesSecond).ToList()), JsonConvert.SerializeObject(result));

@@ -32,7 +32,7 @@ namespace BadBrokerTestTask.Controllers
             {
                 return BadRequest("The specified historical period cannot exceed 2 months (60 days)");
             }
-            List<Models.CurrencyRateModel> currencies = await _exchangeRatesLoader.GetCurrencyRates(startDate, endDate);
+            List<Models.CurrencyRateModel> currencies = await _exchangeRatesLoader.GetCurrencyRatesAsync(startDate, endDate);
             Models.Responses.BestRatesResponse result = _revenueCalculator.CalculateHighestRevenue(currencies, moneyUsd);
             return Ok(result);
         }

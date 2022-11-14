@@ -8,6 +8,6 @@ namespace BadBrokerTestTask.Interfaces
 {
     public interface IExchangeRatesLoader
     {
-        Task<List<CurrencyRateModel>> GetCurrencyRates(DateTime from, DateTime to);
+        Task<List<CurrencyRateModel>> GetCurrencyRatesAsync(DateTime from, DateTime to);
     }
 }

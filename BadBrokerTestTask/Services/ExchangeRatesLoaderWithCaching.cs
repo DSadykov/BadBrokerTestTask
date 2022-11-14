@@ -18,9 +18,9 @@ namespace BadBrokerTestTask.Services
             _exchangeRatesLoader = exchangeRatesLoader;
             _dbRepository = dbRepository;
         }
-        public async Task<List<CurrencyRateModel>> GetCurrencyRates(DateTime from, DateTime to)
+        public async Task<List<CurrencyRateModel>> GetCurrencyRatesAsync(DateTime from, DateTime to)
         {
-            List<CurrencyRateModel> cachedRates = await _dbRepository.GetRates(from, to);
+            List<CurrencyRateModel> cachedRates = await _dbRepository.GetRatesAsync(from, to);
             
             if (!cachedRates.Any())
             {
@@ -28,10 +28,10 @@ namespace BadBrokerTestTask.Services
                 List<CurrencyRateModel> apiRates = await GetMissedAndCache(from, to);
                 return apiRates;
             }
-            return await GetFromCache(from, to, cachedRates);
+            return await GetFromCacheAsync(from, to, cachedRates);
         }
 
-        private async Task<List<CurrencyRateModel>> GetFromCache(DateTime from, DateTime to, List<CurrencyRateModel> cachedRates)
+        private async Task<List<CurrencyRateModel>> GetFromCacheAsync(DateTime from, DateTime to, List<CurrencyRateModel> cachedRates)
         {
             DateTime maxDate = cachedRates.Max(x => x.DateTime);
             DateTime minDate = cachedRates.Min(x => x.DateTime);
@@ -66,8 +66,8 @@ namespace BadBrokerTestTask.Services
 
         private async Task<List<CurrencyRateModel>> GetMissedAndCache(DateTime from, DateTime to)
         {
-            List<CurrencyRateModel> apiRates = await _exchangeRatesLoader.GetCurrencyRates(from, to);
-            await _dbRepository.AddRates(apiRates);
+            List<CurrencyRateModel> apiRates = await _exchangeRatesLoader.GetCurrencyRatesAsync(from, to);
+            await _dbRepository.AddRatesAsync(apiRates);
             return apiRates;
         }
     }

@@ -7,6 +7,6 @@ namespace BadBrokerTestTask.Interfaces
 {
     public interface IOpenExchangeRatesClient
     {
-        Task<CurrencyRateModel> GetRatesForADate(DateTime date);
+        Task<CurrencyRateModel> GetRatesForADateAsync(DateTime date);
     }
 }
