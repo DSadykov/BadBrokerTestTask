@@ -18,6 +18,9 @@ namespace BadBrokerTestTask.Services
             _exchangeRatesLoader = exchangeRatesLoader;
             _dbRepository = dbRepository;
         }
+        /// <summary>
+        /// Returns list of currency rates is specified date range, some of them will be from cached data
+        /// </summary>
         public async Task<List<CurrencyRateModel>> GetCurrencyRatesAsync(DateTime from, DateTime to)
         {
             List<CurrencyRateModel> cachedRates = await _dbRepository.GetRatesAsync(from, to);

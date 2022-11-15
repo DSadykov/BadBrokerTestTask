@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Models;
@@ -46,6 +48,7 @@ namespace BadBrokerTestTask.Repository
                     Rate decimal(10,6) NOT NULL 
                     )";
                 db.Execute(sqlQuery);
+                _logger.LogInformation("Successfully created table Rates");
             }
         }
 
@@ -65,6 +68,7 @@ namespace BadBrokerTestTask.Repository
                 {
                     var sqlQuery = $"CREATE DATABASE {dbName}";
                     db.Execute(sqlQuery);
+                    _logger.LogInformation($"Successfully created database {dbName}");
                 }
                 else
                 {
@@ -100,7 +104,8 @@ namespace BadBrokerTestTask.Repository
                 }
                 result.Add(currencyRateModel);
             }
-
+            _logger.LogInformation($"Successfully got rates from database");
+            _logger.LogTrace($"{JsonSerializer.Serialize(result)}");
             return result;
         }
 
@@ -123,6 +128,7 @@ else
                 foreach (KeyValuePair<string, decimal> rate in currencyRateModel.Rates)
                 {
                     await db.ExecuteAsync(sqlQuery, new CurrencyRateDbModel() { Currency = rate.Key, Date = currencyRateModel.DateTime, Rate = rate.Value });
+                    _logger.LogInformation($"Successfully added rate {currencyRateModel.DateTime} - {rate.Key} - {rate.Value} to database");
                 }
             }
         }

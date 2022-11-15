@@ -21,6 +21,13 @@ namespace BadBrokerTestTask.Services
             _logger = logger;
             _requierdCurrencies = configuration["RequiredCurrencies"].Split(',').Select(x => x.ToLower()).ToList();
         }
+        /// <summary>
+        /// Calculates highest revenue, buy time and sell time and returns them as part of <c>BestRatesResponse</c>
+        /// 
+        /// </summary>
+        /// <returns> Can return negative revenue which means there are no profitable currency
+        /// </returns>
+
         public BestRatesResponse CalculateHighestRevenue(List<CurrencyRateModel> currencies, decimal usd)
         {
             BestRatesResponse result = new()

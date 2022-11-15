@@ -22,6 +22,9 @@ namespace BadBrokerTestTask.Services
             _logger = logger;
             _openExchangeRatesClient = openExchangeRatesClient;
         }
+        /// <summary>
+        /// Returns list of currency rates is specified date range
+        /// </summary>
         public virtual async Task<List<CurrencyRateModel>> GetCurrencyRatesAsync(DateTime from, DateTime to)
         {
             List<CurrencyRateModel> result = new();
@@ -38,7 +41,7 @@ namespace BadBrokerTestTask.Services
                 }
             }
             _logger.LogInformation($"Successfuly got currency rates for dates {from} - {to}");
-            _logger.LogDebug(JsonSerializer.Serialize(result));
+            _logger.LogTrace(JsonSerializer.Serialize(result));
             return result;
         }
     }

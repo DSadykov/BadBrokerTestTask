@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 using BadBrokerTestTask.Interfaces;
@@ -26,9 +27,16 @@ namespace BadBrokerTestTask.Services
             _requierdCurrencies = configuration["RequiredCurrencies"].Split(',').Select(x => x.ToLower()).ToList();
             _logger = logger;
         }
+        /// <summary>
+        /// Gets <c>CurrencyRateModel</c> from openexchangerates.org/api/historical/{<c>date</c>:yyyy-MM-dd}.json?app_id={<c>_apiKey</c>}
+        /// 
+        /// </summary>
+        /// 
+        /// <returns>Returns null if an error occurred, otherwise returns <c>CurrencyRateModel</c> with rates specified in appsettings</returns>
         public async Task<CurrencyRateModel> GetRatesForADateAsync(DateTime date)
         {
-            RestClient client = new($"https://openexchangerates.org/api/historical/{date:yyyy-MM-dd}.json?app_id={_apiKey}");
+            var baseUrl = $"https://openexchangerates.org/api/historical/{date:yyyy-MM-dd}.json?app_id={_apiKey}";
+            RestClient client = new(baseUrl);
             try
             {
                 RestResponse<CurrencyRateModel> result = await client.ExecuteAsync<CurrencyRateModel>(new RestRequest() { Method = Method.Get });
@@ -38,6 +46,8 @@ namespace BadBrokerTestTask.Services
                     //Selects only required currencies, which are specified in the appsettings
                     result.Data.Rates = result.Data.Rates.Where(x => _requierdCurrencies.Contains(x.Key.ToLower()))
                                                .ToDictionary(x => x.Key.ToLower(), y => y.Value);
+                    _logger.LogInformation($"Successfully got currency rates from{baseUrl}");
+                    _logger.LogTrace(JsonSerializer.Serialize(result.Data));
                     return result.Data;
                 }
                 else
