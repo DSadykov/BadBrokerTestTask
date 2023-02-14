@@ -12,7 +12,6 @@ namespace BadBrokerTestTask.Repository
         public RatesDbContext(DbContextOptions<RatesDbContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
         }
         public DbSet<CurrencyRateDbModel> CurrencyRateModels { get; set; }     
         public async Task AddRateModel(CurrencyRateDbModel currencyRateDbModel)
