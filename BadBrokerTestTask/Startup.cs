@@ -1,3 +1,5 @@
+using System;
+
 using BadBrokerTestTask.Interfaces;
 using BadBrokerTestTask.Middleware;
 using BadBrokerTestTask.Repository;
@@ -5,6 +7,7 @@ using BadBrokerTestTask.Services;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +33,7 @@ namespace BadBrokerTestTask
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BadBrokerTestTask", Version = "v1" });
             });
+            services.AddDbContext<RatesDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddTransient<ExchangeRatesLoader>();
             services.AddTransient<IExchangeRatesLoader, ExchangeRatesLoaderWithCaching>();
             services.AddTransient<IOpenExchangeRatesClient, OpenExchangeRatesClient>();
