@@ -33,7 +33,7 @@ namespace BadBrokerTestTask.Repository
         public async Task<List<CurrencyRateModel>> GetRatesAsync(DateTime from, DateTime to)
         {
             List<CurrencyRateModel> result = new();
-            foreach (IGrouping<DateTime, CurrencyRateDbModel> groupedCurrencyRateDbModel in _ratesDbContext.CurrencyRateModels.GroupBy(x => x.Date))
+            foreach (IGrouping<DateTime, CurrencyRateDbModel> groupedCurrencyRateDbModel in _ratesDbContext.CurrencyRateModels.Where(x=>x.Date>=from&&x.Date<=to).AsEnumerable().GroupBy(x => x.Date))
             {
                 CurrencyRateModel currencyRateModel = new()
                 {
